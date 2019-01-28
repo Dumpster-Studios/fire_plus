@@ -174,3 +174,12 @@ function fire_plus.burnplayer(player)
 		end
 	end)
 end
+
+minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_ca, dir, dmg)
+	if hitter:is_player() and tool_ca.damage_groups.burns == 1 and 
+	(player:get_hp()-dmg) > 0 then
+		fire_plus.burnplayer(player)
+	end
+
+	return(false)
+end)
