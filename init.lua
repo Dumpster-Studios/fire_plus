@@ -25,11 +25,11 @@ local function make_registration()
 	return(registerfunc)
 end
 
-minetest.register_on_player_hpchange(function(player, hp_change)
+minetest.register_on_player_hpchange(function(player)
 	local pos = player:get_pos()
 	local node = minetest.get_node(pos)
 
-	for id, string in ipairs(fire_plus.ignition_nodes) do
+	for _, string in ipairs(fire_plus.ignition_nodes) do
 		if node.name:find(string) then
 			fire_plus.burnplayer(player)
 			break
@@ -56,8 +56,8 @@ fire_plus.on_burn = make_registration()
 function fire_plus.get_burn_dmg(player)
 	local dmg = 1
 
-	for id, func in ipairs(callbacks) do
-		local rval = callbacks[k](player)
+	for _, func in ipairs(callbacks) do
+		local rval = func(player)
 
 		if type(rval) == "number" then
 			dmg = rval
@@ -101,11 +101,11 @@ function fire_plus.burnplayer(player)
 
 			local pos = player:get_pos()
 			local pname = player:get_player_name()
-			local name = minetest.get_node(pos).name
+			local nodename = minetest.get_node(pos).name
 			local remove_burn = false
 
-			for id, string in ipairs(fire_plus.put_outs) do
-				if name:find(string) then
+			for _, string in ipairs(fire_plus.put_outs) do
+				if nodename:find(string) then
 					remove_burn = true
 					break
 				end
@@ -118,8 +118,8 @@ function fire_plus.burnplayer(player)
 				firesound[pname] = nil
 
 				minetest.sound_play("fire_extinguish_flame", {
-	    			to_player = pname,
-	    			gain = 1.0,
+					to_player = pname,
+					gain = 1.0,
 				})
 
 				return
@@ -134,7 +134,7 @@ function fire_plus.burnplayer(player)
 			end
 
 			if tntpos then
-				tnt.boom(tntpos, {radius = tnt_radius, damage_radius = tnt_radius})
+				tnt.boom(tntpos, {radius = fire_plus.tnt_explode_radius, damage_radius = fire_plus.tnt_explode_radius})
 			end
 
 			minetest.add_particlespawner({
@@ -161,8 +161,6 @@ function fire_plus.burnplayer(player)
 			return
 		end
 
-		local name = player:get_player_name()
-
 		if firehud[name] then
 			player:hud_remove(firehud[name])
 			firehud[name] = nil
@@ -175,8 +173,8 @@ function fire_plus.burnplayer(player)
 	end)
 end
 
-minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_ca, dir, dmg)
-	if hitter:is_player() and tool_ca.damage_groups.burns == 1 and 
+minetest.register_on_punchplayer(function(player, hitter, _, tool_ca, _, dmg)
+	if hitter:is_player() and tool_ca.damage_groups.burns == 1 and
 	(player:get_hp()-dmg) > 0 then
 		fire_plus.burnplayer(player)
 	end
