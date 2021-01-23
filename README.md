@@ -1,4 +1,5 @@
 # Fire Plus
+[![Build status](https://github.com/Dumpster-Studios/fire_plus/workflows/build/badge.svg)](https://github.com/Dumpster-Studios/fire_plus/actions) 
 [![ContentDB](https://content.minetest.net/packages/Lone_Wolf/fire_plus/shields/downloads/)](https://content.minetest.net/packages/Lone_Wolf/fire_plus/)
 ![GitHub](https://img.shields.io/github/license/Dumpster-Studios/fire_plus?color=blue)
 
