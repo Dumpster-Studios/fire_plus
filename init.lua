@@ -35,23 +35,28 @@ minetest.register_globalstep(function(dtime)
 
 	-- Put out players in extinguisher nodes
 	for _, player in pairs(minetest.get_connected_players()) do
-		local nodename = minetest.get_node(player:get_pos()).name
-		local nodename_head = minetest.get_node(vector.add(player:get_pos(), vector.new(0, 1, 0))).name
 
-		for _, extinguisher in pairs(fire_plus.extinguishers) do
-			if nodename:find(extinguisher) or nodename_head:find(extinguisher) then
-				local name = player:get_player_name()
+		local name = player:get_player_name()
 
-				if fire_plus.burning[name] then
+		if fire_plus.burning[name] then
+
+			local nodename = minetest.get_node(player:get_pos()).name
+			local nodename_head = minetest.get_node(vector.add(player:get_pos(),
+					vector.new(0, 1, 0))).name
+
+			for _, extinguisher in pairs(fire_plus.extinguishers) do
+
+				if nodename:find(extinguisher) or nodename_head:find(extinguisher) then
+
 					minetest.sound_play("fire_extinguish_flame", {
 						to_player = name,
 						gain = 1.0,
 					})
 
 					fire_plus.extinguish_player(name)
-				end
 
-				return
+					return
+				end
 			end
 		end
 	end
