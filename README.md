@@ -10,6 +10,9 @@ You can put yourself out by jumping into water/snow.
 
 ![Screenshot](screenshot.png)
 
+## Credits
+* Thanks to **TenPlus1** for 3d_armor support and some other things
+
 ## API
 
 * `fire_plus.burn_player(player, burns, damage)`
