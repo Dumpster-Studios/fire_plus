@@ -1,3 +1,5 @@
+local armor_mod = minetest.get_modpath("3d_armor")
+
 -- Replace min/max table with random value from min to max
 local function get_val(val)
 	if type(val) == "table" then
@@ -23,6 +25,11 @@ function fire_plus.burn_player(player, burns, damage, not_initial)
 	end
 
 	name = player:get_player_name()
+
+	-- 3d_armor fire protection puts out flames
+	if armor_mod and armor.def[name].fire > 1 then
+		fire_plus.extinguish_player(name)
+	end
 
 	-- Fire was extinguished
 	if not fire_plus.burning[name] and not_initial then
