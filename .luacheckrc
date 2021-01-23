@@ -1,5 +1,6 @@
 globals = {
 	"fire_plus",
+	"armor",
 }
 
 read_globals = {
